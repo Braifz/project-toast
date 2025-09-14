@@ -26,10 +26,17 @@ function Toast({ variant, message, deleteToast, id }) {
       <div className={styles.iconContainer}>
         <IconComponent />
       </div>
-      <p className={styles.content}>{message}</p>
-      <button className={styles.closeButton} onClick={() => deleteToast(id)}>
+      <p className={styles.content}>
+        <VisuallyHidden>{variant}</VisuallyHidden>
+        {message}
+      </p>
+      <button
+        className={styles.closeButton}
+        onClick={() => deleteToast(id)}
+        aria-label="Dismiss message"
+        aria-live="off"
+      >
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );

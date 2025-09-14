@@ -4,19 +4,22 @@ import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
 import ToastShelf from "../ToastShelf";
+import { ToastContext } from "../ToastProvider/ToastProvider";
+import useEscapeKey from "../../hooks/useEscapeKey";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
   const [message, setMessage] = useState("");
   const [variantSelected, setVariantSelected] = useState("notice");
-  const [toasts, setToasts] = useState([]);
+
+  const { createToast } = React.useContext(ToastContext);
 
   const handleMessageInput = (event) => {
     setMessage(event.target.value);
   };
 
-  const resetToast = () => {
+  const resetInputToast = () => {
     setVariantSelected("notice");
     setMessage("");
   };
@@ -24,17 +27,12 @@ function ToastPlayground() {
   const handleToast = (e) => {
     e.preventDefault();
 
-    setToasts((prevToasts) => [
-      ...prevToasts,
-      { id: Date.now(), message, variant: variantSelected },
-    ]);
+    createToast(message, variantSelected);
 
-    resetToast();
+    resetInputToast();
   };
 
-  const deleteToast = (id) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-  };
+  useEscapeKey();
 
   return (
     <div className={styles.wrapper}>
@@ -43,7 +41,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toasts} deleteToast={deleteToast} />
+      <ToastShelf />
 
       <form onSubmit={handleToast}>
         <div className={styles.controlsWrapper}>
