@@ -3,15 +3,22 @@ import React, { useState } from "react";
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
+import Toast from "../Toast";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [message, setMessage] = useState();
-  const [variantSelected, setVariantSelected] = useState();
+  const [message, setMessage] = useState('');
+  const [variantSelected, setVariantSelected] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const handleMessageInput = (event) => {
     setMessage(event.target.value);
+  };
+
+  const handleToast = () => {
+    setShowToast(!showToast);
+    console.log(variantSelected)
   };
 
   return (
@@ -34,11 +41,18 @@ function ToastPlayground() {
             <textarea
               id="message"
               className={styles.messageInput}
-              value="message"
+              value={message}
               onChange={handleMessageInput}
             />
           </div>
         </div>
+
+        {showToast && (
+          <Toast
+            variant={variantSelected}
+            message={message}
+          />
+        )}
 
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
@@ -64,7 +78,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button>Pop Toast!</Button>
+            <Button onClick={handleToast}>Pop Toast!</Button>
           </div>
         </div>
       </div>
